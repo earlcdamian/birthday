@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Baby 💖</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: white;
+  text-align: center;
+}
+
+/* SECTION */
+.section {
+  display: none;
+  min-height: 100vh;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.active { display: flex; }
+
+/* GLASS */
+.glass {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.2);
+}
+
+/* TEXT */
+h1 { font-size: clamp(2rem, 6vw, 3rem); }
+h2 { margin: 10px 0; }
+p { margin-bottom: 10px; }
+
+/* BUTTON */
+button {
+  padding: 12px;
+  margin: 6px;
+  border: none;
+  border-radius: 30px;
+  background: white;
+  color: #ff4e50;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* GRID */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.card {
+  position: relative;
+  height: 110px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.icon { font-size: 28px; }
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 6px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 0 0 15px 15px;
+}
+
+/* POPUP FIX (SCROLLABLE 🔥) */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* IMPORTANT PART */
+.popup-content {
+  background: white;
+  color: #333;
+  padding: 15px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 420px;
+
+  max-height: 85vh; /* 🔥 para scrollable */
+  overflow-y: auto; /* 🔥 enable scroll */
+
+  text-align: center;
+}
+
+/* SCROLL SMOOTH */
+.popup-content::-webkit-scrollbar {
+  width: 5px;
+}
+.popup-content::-webkit-scrollbar-thumb {
+  background: #ff6b81;
+  border-radius: 10px;
+}
+
+/* IMAGES */
+.popup-content img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* MEMORY CARD STYLE */
+.memory {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.memory p {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* CLOSE */
+.close {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  background: #ff6b81;
+  color: white;
+  border-radius: 10px;
+}
+
+/* HEARTS */
+.heart {
+  position: fixed;
+  bottom: -10px;
+  animation: float 6s linear forwards;
+}
+
+@keyframes float {
+  to { transform: translateY(-100vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div class="section active" id="intro">
+  <div class="glass">
+    <h1>Hello 💖</h1>
+    <h2>My Baby!</h2>
+    <p>Do you want to see your gift? 🎁</p>
+
+    <button onclick="goTo('yes')">Yes 💌</button>
+    <button onclick="goTo('no')">No 😢</button>
+  </div>
+</div>
+
+<!-- NO -->
+<div class="section" id="no">
+  <div class="glass">
+    <h2>🥺 I promise you'll like it 💖</h2>
+    <button onclick="goTo('intro')">Try Again</button>
+  </div>
+</div>
+
+<!-- YES -->
+<div class="section" id="yes">
+  <div class="glass">
+    <h2>🎁 These are for you!</h2>
+
+    <div class="gallery">
+      <div class="card" onclick="openPopup('love')">
+        <div class="icon">👩</div>
+        <div class="overlay">Memories💕</div>
+      </div>
+
+      <div class="card" onclick="openPopup('message')">
+        <div class="icon">💌</div>
+        <div class="overlay">Message 💖</div>
+      </div>
+
+      <div class="card" onclick="openPopup('invitation')">
+        <div class="icon">🍽</div>
+        <div class="overlay">Dinner 🍝</div>
+      </div>
+
+      <div class="card" onclick="openPopup('flower')">
+        <div class="icon">🌸</div>
+        <div class="overlay">Flowers 💐</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup" onclick="closePopup()">
+  <div class="popup-content" id="popupContent" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+function goTo(section) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(section).classList.add('active');
+}
+
+function openPopup(type) {
+  let content = "";
+
+  if(type === "message"){
+    content = `<h2>💌</h2>
+    <p>Here’s a more natural, personal version—parang ikaw lang talaga nagsulat, hindi AI:
+
+---
+
+Hi Chrishia, nunay! 🎉 Happy birthday sayo! Sana maging masaya ka today at sa mga susunod pang araw. Alam mo naman, kahit lagi kang may toyo 😜, mahal na mahal pa rin kita. Minsan makulit ka, minsan nakakainis, pero ikaw pa rin yung dahilan kung bakit napapangiti ako kahit simpleng bagay lang. 💖
+
+Sana this year, mas marami pa tayong tawanan, kulitan, at moments na tayo lang ang nakakaintindi. Gusto ko rin na makuha mo lahat ng blessings na deserve mo at matupad mo yung mga pangarap mo sa buhay.
+
+Alam mo naman ako, sasabihin ko pa rin—sana kahit papaano magbago ka rin. Bawasan mo yung pagiging makasarili minsan at yung pakiramdam na parang walang nakakaintindi sayo. Hindi sa lahat ng oras tama tayo, kaya sana matuto rin tayong mag-isip at maging maingat sa decisions. At oo, bawasan mo na rin yung gala gala 😅
+
+Higit sa lahat, sana mas mapalapit ka pa sa Diyos na kapag may problema ka sa kaniya kalang lalapit hindi yung pupunta ka sa mga kaibigan mo agad, gabi na uuwi o ano, sana sa Diyos una mong lapitan o takbuhan. Siya yung gabay mo lagi, lalo na sa mga panahong nahihirapan ka. Tandaan mo, hindi ka nag-iisa. Nandidito lang ako lagi kahit sa tingin mong di kita naiintindihan naiintindihan po kita at sana mapadaw morin ako sa mga mali at kasalanan ko.
+
+Kahit anong mangyari, nandito lang ako. Hindi nagbabago yung pagmamahal ko sayo. Ikaw pa rin yung favorite person ko—sa kulit, sa kwentuhan, sa lahat. Sana mas maging masaya pa tayo this year at mas maging strong, together. 💖🥰
+</p>`;
+  }
+
+  if(type === "love"){
+    content = `
+    <h2>📸 Memories</h2>
+
+    <div class="memory">
+      <img src="date.jpg">
+      <p>1st Date natin, nahihiya ka pa 💖</p>
+    </div>
+
+    <div class="memory">
+      <img src="pnk.jpg">
+      <p>Unang tupad natin na magkasabay pero sa pasalamat as PNK 🙏</p>
+    </div>
+
+    <div class="memory">
+      <img src="dalaw.jpg">
+      <p>1st time mo kong samahan mag dalaw 💕</p>
+    </div>
+
+    <div class="memory">
+      <img src="travel.jpg">
+      <p>1st travel natin together ✈️</p>
+    </div>
+
+    <div class="memory">
+      <img src="cut.jpg">
+      <p>Papasok raw sa school pero sayo papasok at makikipagkita, Cutting class yarn HAHAHA 🤣</p>
+    </div>
+
+    <div class="memory">
+      <img src="samba.jpg">
+      <p>First pic natin sa kapilya at 1st time kong hindi tumupad dahil tumabay tyo nila Ipoy at Ced sainyo nalate pa kami sa drill HAHAHHAHAHA 😆</p>
+    </div>
+    `;
+  }
+
+  if(type === "flower"){
+    content = `<h2>Flowers for you 🌸</h2><img src="earl.jpg">`;
+  }
+
+  if(type === "invitation"){
+    content = `<h2>🍽 Date?</h2><p>Let's celebrate together. Message me 💖</p>`;
+  }
+
+  document.getElementById("popupContent").innerHTML =
+    content + '<button class="close" onclick="closePopup()">Close</button>';
+
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+/* HEARTS */
+setInterval(()=>{
+  const heart=document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML="💖";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(Math.random()*15+10)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),6000);
+},500);
+</script>
+
+</body>
+</html>
